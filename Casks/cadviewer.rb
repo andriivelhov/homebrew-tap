@@ -1,11 +1,12 @@
 # Homebrew cask. Publish by putting this file in a tap repository named
 # homebrew-tap, at Casks/cad-viewer.rb:
 #
-#   brew install --cask andriivelhov/tap/cad-viewer
+#   brew tap andriivelhov/tap      # once
+#   brew install cadviewer
 #
 # Update `version` and `sha256` for each release; get the checksum with
 #   shasum -a 256 packaging/CADViewer-<version>.dmg
-cask "cad-viewer" do
+cask "cadviewer" do
   version "1.0"
   sha256 "d5ba323b7cb76b9778d9e1c19ea50dd99578edc84b5965bedde7a3d633f260b5"
 
