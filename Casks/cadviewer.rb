@@ -23,15 +23,20 @@ cask "cadviewer" do
 
   app "CAD Viewer.app"
 
-  # Register with LaunchServices so the Finder thumbnail and preview extensions
-  # come up straight after installing. Without this they stay dormant until the
-  # app is launched once, so a fresh install shows generic document icons for
-  # every STEP file and looks broken.
+  # A fresh install otherwise shows generic document icons for every STEP file:
+  # the Finder thumbnail and preview extensions stay dormant until the app has
+  # been launched once. lsregister publishes the file types, and pluginkit
+  # registers the two extensions directly - lsregister alone only sometimes
+  # nudges them into being discovered, and can take a minute when it does.
   postflight do
     system_command "/System/Library/Frameworks/CoreServices.framework/" \
                    "Frameworks/LaunchServices.framework/Support/lsregister",
-                   args: ["-f", "#{appdir}/CAD Viewer.app"],
-                   sudo: false
+                   args: ["-f", "#{appdir}/CAD Viewer.app"], sudo: false
+    ["CADThumbnail", "CADPreview"].each do |ext|
+      system_command "/usr/bin/pluginkit",
+                     args: ["-a", "#{appdir}/CAD Viewer.app/Contents/PlugIns/#{ext}.appex"],
+                     sudo: false
+    end
   end
 
   zap trash: [
