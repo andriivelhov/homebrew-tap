@@ -14,7 +14,7 @@ cask "cad-viewer" do
   desc "Native viewer for STEP, IGES, STL, OBJ and glTF with exact measurement"
   homepage "https://github.com/andriivelhov/cad-viewer"
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
   depends_on arch: :arm64
 
   app "CAD Viewer.app"
