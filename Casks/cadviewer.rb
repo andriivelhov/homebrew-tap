@@ -1,8 +1,11 @@
 # Homebrew cask. Publish by putting this file in a tap repository named
 # homebrew-tap, at Casks/cad-viewer.rb:
 #
-#   brew tap andriivelhov/tap      # once
-#   brew install cadviewer
+#   brew tap andriivelhov/tap     # once
+#   brew install --cask cadviewer
+#
+# Dropping the tap step entirely means getting into homebrew/cask itself, which
+# requires the project to be notable and to follow their token conventions.
 #
 # Update `version` and `sha256` for each release; get the checksum with
 #   shasum -a 256 packaging/CADViewer-<version>.dmg
@@ -19,6 +22,17 @@ cask "cadviewer" do
   depends_on arch: :arm64
 
   app "CAD Viewer.app"
+
+  # Register with LaunchServices so the Finder thumbnail and preview extensions
+  # come up straight after installing. Without this they stay dormant until the
+  # app is launched once, so a fresh install shows generic document icons for
+  # every STEP file and looks broken.
+  postflight do
+    system_command "/System/Library/Frameworks/CoreServices.framework/" \
+                   "Frameworks/LaunchServices.framework/Support/lsregister",
+                   args: ["-f", "#{appdir}/CAD Viewer.app"],
+                   sudo: false
+  end
 
   zap trash: [
     "~/Library/Preferences/dev.cadviewer.app.plist",
